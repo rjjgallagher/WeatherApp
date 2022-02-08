@@ -64,8 +64,8 @@ class ForecastActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar
 
-        if(actionBar != null) {             // actionBar!!.title = "Forecast"
-                                            // accomplishes the same thing.
+        if (actionBar != null) {             // actionBar!!.title = "Forecast"
+            // accomplishes the same thing.
             actionBar.title = "Forecast"
             actionBar.setDisplayHomeAsUpEnabled(true)
         }

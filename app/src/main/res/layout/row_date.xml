@@ -47,8 +47,8 @@
         android:layout_marginBottom="4dp"
 
         android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@id/sunrise_time"
         app:layout_constraintEnd_toStartOf="@id/sunrise_time"
+        app:layout_constraintTop_toTopOf="@id/sunrise_time"
         tools:text="Sunrise: " />
 
     <TextView
@@ -57,56 +57,56 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
 
-        app:layout_constraintTop_toTopOf="@id/sunset_time"
         app:layout_constraintBottom_toBottomOf="@id/sunset_time"
         app:layout_constraintStart_toStartOf="@id/sunrise_text"
-        tools:text="Sunset: "/>
+        app:layout_constraintTop_toTopOf="@id/sunset_time"
+        tools:text="Sunset: " />
 
     <!-- text view for "Temp: 99*", middle of row -->
     <TextView
         android:id="@+id/curr_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toTopOf="@id/sunrise_text"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/date"
-        tools:text = "Temp: 72°"/>
+        app:layout_constraintTop_toTopOf="@id/sunrise_text"
+        tools:text="Temp: 72°" />
 
     <!--text view for high: 80*, middle of row -->
     <TextView
         android:id="@+id/high_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/curr_temp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/curr_temp"
-        tools:text = "High: 80°"/>
+        app:layout_constraintTop_toBottomOf="@id/curr_temp"
+        tools:text="High: 80°" />
 
     <!-- text view for low: 70*, middle of row-->
     <TextView
         android:id="@+id/low_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:layout_marginLeft="10dp"
-        app:layout_constraintTop_toTopOf="@id/high_temp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/high_temp"
-        tools:text="Low: 65°"/>
+        app:layout_constraintTop_toTopOf="@id/high_temp"
+        tools:text="Low: 65°" />
 
     <ImageView
         android:id="@+id/condition_icon"
         android:layout_width="66dp"
         android:layout_height="54dp"
+        android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
         android:src="@drawable/sun"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

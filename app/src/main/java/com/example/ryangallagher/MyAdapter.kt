@@ -11,7 +11,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class MyAdapter(private val dayForecastData: List<DayForecast>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(private val dayForecastData: List<DayForecast>) :
+    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     @SuppressLint("NewApi")
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
