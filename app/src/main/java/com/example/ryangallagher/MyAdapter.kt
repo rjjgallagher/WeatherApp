@@ -30,8 +30,6 @@ class MyAdapter(private val dayForecastData: List<DayForecast>) :
         private val lowTimeView: TextView = view.findViewById(R.id.low_temp)
         private val currentTimeView: TextView = view.findViewById(R.id.curr_temp)
 
-        val sunriseTextView: TextView = view.findViewById(R.id.sunrise_text)
-
 
         @SuppressLint("ResourceType")
         fun bind(data: DayForecast) {
