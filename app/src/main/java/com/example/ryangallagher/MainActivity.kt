@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ForecastActivity::class.java)
         startActivity(intent)
     }
-
+    //githubtest1234
     /*
     within the private class, he's got:
     private lateinit var button: Button
