@@ -95,7 +95,6 @@ class MainActivity : AppCompatActivity() {
         Glide.with(this)
             .load(iconUrl)
             .into(conditionIcon)
-
     }
 
     fun forecastActivity(view: android.view.View) {

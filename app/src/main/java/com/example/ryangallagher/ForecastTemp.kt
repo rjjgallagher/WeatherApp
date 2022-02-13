@@ -1,6 +1,10 @@
 package com.example.ryangallagher
 
-data class ForecastTemp(val day: Float, val max: Float, val min: Float)
+data class ForecastTemp(
+    val day: Float,
+    val max: Float,
+    val min: Float
+    )
 
 
 /*

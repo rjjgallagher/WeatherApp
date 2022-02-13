@@ -7,5 +7,6 @@ data class DayForecast(
     val sunset: Long,
     val temp: ForecastTemp,
     val pressure: Float,
-    val humidity: Float
+    val humidity: Float,
+    val icon: String,
 )
