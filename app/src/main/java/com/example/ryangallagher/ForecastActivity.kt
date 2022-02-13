@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class ForecastActivity : AppCompatActivity() {
 
     //his code. He put this in main. I think it goes here for me - in this activity.
     private lateinit var recyclerView: RecyclerView
+    private lateinit var api: Api
 
     private val forecastTemp1 = ForecastTemp(72f, 80f, 65f)
     private val forecastTemp2 = ForecastTemp(71f, 81f, 67f)
@@ -51,6 +56,15 @@ class ForecastActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
 
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+        api = retrofit.create(Api::class.java)
+
         //his code
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -64,10 +78,14 @@ class ForecastActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar
 
-        if (actionBar != null) {             // actionBar!!.title = "Forecast"
-            // accomplishes the same thing.
+        if (actionBar != null) {             // actionBar!!.title = "Forecast" accomplishes the same thing.
             actionBar.title = "Forecast"
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 }

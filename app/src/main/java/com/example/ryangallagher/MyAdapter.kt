@@ -33,8 +33,8 @@ class MyAdapter(private val dayForecastData: List<DayForecast>) :
 
         @SuppressLint("ResourceType")
         fun bind(data: DayForecast) {
-            sunriseTextTimeView.text = "Sunrise: "
-            sunsetTextTimeView.text = "Sunset: "
+            //sunriseTextTimeView.text = "Sunrise: "
+            //sunsetTextTimeView.text = "Sunset: "
             sunriseTimeView.text = "Sunrise: ${data.sunrise}"
             sunsetTimeView.text = "Sunset: ${data.sunset}"
             highTimeView.text = "High: ${data.temp.max}"
@@ -48,7 +48,8 @@ class MyAdapter(private val dayForecastData: List<DayForecast>) :
 
             val instant2 = Instant.ofEpochSecond(data.sunrise)
             val sunriseTime = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault())
-            sunriseTimeView.text = timeFormatter.format(sunriseTime)
+            sunriseTimeView.text = "Sunrise: ${timeFormatter.format(sunriseTime)}"
+            //sunriseTimeView.text = timeFormatter.format(sunriseTime)
 
             val instant3 = Instant.ofEpochSecond(data.sunset)
             val sunsetTime = LocalDateTime.ofInstant(instant3, ZoneId.systemDefault())

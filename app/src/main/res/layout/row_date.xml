@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
-
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@id/sunrise_time"
         app:layout_constraintTop_toTopOf="@id/sunrise_time"
@@ -56,7 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-
         app:layout_constraintBottom_toBottomOf="@id/sunset_time"
         app:layout_constraintStart_toStartOf="@id/sunrise_text"
         app:layout_constraintTop_toTopOf="@id/sunset_time"
