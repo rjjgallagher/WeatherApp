@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lowTemp: TextView
     private lateinit var humidity: TextView
     private lateinit var pressure: TextView
+    private lateinit var button: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         lowTemp = findViewById(R.id.low)
         humidity = findViewById(R.id.humidity)
         pressure = findViewById(R.id.pressure)
+        button = findViewById(R.id.forecast_button)
+
+        button.setOnClickListener {
+            startActivity(Intent(this, ForecastActivity::class.java))
+        }
 
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
@@ -97,10 +104,7 @@ class MainActivity : AppCompatActivity() {
             .into(conditionIcon)
     }
 
-    fun forecastActivity(view: android.view.View) {
-        val intent = Intent(this, ForecastActivity::class.java)
-        startActivity(intent)
-    }
+
 
     /*
     within the private class, he's got:
@@ -109,6 +113,7 @@ class MainActivity : AppCompatActivity() {
     then within the onCreate() function, he's got:
     button.setOnClickListener {
         startActivity(Intent(this, ForecastActivity::class.java))
+
     }
     */
 }

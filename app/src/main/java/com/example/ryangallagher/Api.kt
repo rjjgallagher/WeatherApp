@@ -2,6 +2,7 @@ package com.example.ryangallagher
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface Api {
@@ -27,12 +28,12 @@ interface Api {
         @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
     ) : Call<CurrentConditions>
 
-
     //api.openweathermap.org/data/2.5/forecast/daily?zip={zip code},{country code}&appid={API key}
     @GET("daily")
     fun getForecast (   //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
+        @Query("cnt") count: String = "16",
     ) : Call<Forecast>
 }
