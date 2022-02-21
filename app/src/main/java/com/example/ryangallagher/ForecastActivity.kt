@@ -16,7 +16,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**CHECKLIST
- * []get onBind up and running
  * []go through and delete garbage comments
  * []thoroughly document everything.
  */
@@ -41,18 +40,8 @@ class ForecastActivity : AppCompatActivity() {
         Log.d("Post-Moshi/Retrofit", "Line prior to api creation")
         api = retrofit.create(Api::class.java)
 
-        //conditionIcon = findViewById(R.id.condition_icon)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-
-        /*
-        val adapter = MyAdapter()
-        recyclerView.adapter = adapter
-        */ //had issues doing it this way ^ when passing adapterData to MyAdapter and assigning that to the val called adapter on line 42.
-
-
-        //recyclerView.adapter = MyAdapter(adapterData.temp.day) // simplified version of lines 42+43
 
         val actionBar = supportActionBar
 

@@ -19,7 +19,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**                CHECKLIST
  * []go through and delete garbage comments
- * []go through and document things with good comments.
+ * []thoroughly document everything.
  */
 
 class MainActivity : AppCompatActivity() {

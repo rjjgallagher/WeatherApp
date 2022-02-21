@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.internal.ContextUtils.getActivity
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
