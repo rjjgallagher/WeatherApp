@@ -17,6 +17,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
+/**                CHECKLIST
+ * []go through and delete garbage comments
+ * []go through and document things with good comments.
+ */
+
 class MainActivity : AppCompatActivity() {
 
     private val apiKey = "e23be7dabdbe9983722033759ffb9fc3"
@@ -80,11 +85,9 @@ class MainActivity : AppCompatActivity() {
                     bindData(it)                                //explained 1:35mins in. It is a null-safe way to make this function call.
                 }
             }
-
             override fun onFailure(call: Call<CurrentConditions>, t: Throwable) {
-
+                t.printStackTrace()
             }
-
         })
     }
 
@@ -103,17 +106,4 @@ class MainActivity : AppCompatActivity() {
             .load(iconUrl)
             .into(conditionIcon)
     }
-
-
-
-    /*
-    within the private class, he's got:
-    private lateinit var button: Button
-
-    then within the onCreate() function, he's got:
-    button.setOnClickListener {
-        startActivity(Intent(this, ForecastActivity::class.java))
-
-    }
-    */
 }
