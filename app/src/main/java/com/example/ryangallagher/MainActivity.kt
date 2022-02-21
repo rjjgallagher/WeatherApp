@@ -75,16 +75,19 @@ class MainActivity : AppCompatActivity() {
          *   Then we pass the Callback object to it. Finally, we have to implement two functions: onResponse and onFailure.
          */
         val call: Call<CurrentConditions> = api.getCurrentConditions("55124")
-        call.enqueue(object: Callback<CurrentConditions> {      //similar to creating an anonymous inner class in Java.
+        call.enqueue(object :
+            Callback<CurrentConditions> {      //similar to creating an anonymous inner class in Java.
             override fun onResponse(
                 call: Call<CurrentConditions>,
                 response: Response<CurrentConditions>
             ) {
-                val currentConditions = response.body()         // with our Response object, we can get access to the body() function which will do the deserialization for us.
+                val currentConditions =
+                    response.body()         // with our Response object, we can get access to the body() function which will do the deserialization for us.
                 currentConditions?.let {
                     bindData(it)                                //explained 1:35mins in. It is a null-safe way to make this function call.
                 }
             }
+
             override fun onFailure(call: Call<CurrentConditions>, t: Throwable) {
                 t.printStackTrace()
             }
@@ -93,7 +96,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindData(currentConditions: CurrentConditions) {
         cityName.text = currentConditions.name
-        currentTemp.text = getString(R.string.temperature, currentConditions.main.temp.toInt()) //the "d" in %1$d wants an integer, so we cast temp to an int with .toInt()
+        currentTemp.text = getString(
+            R.string.temperature,
+            currentConditions.main.temp.toInt()
+        ) //the "d" in %1$d wants an integer, so we cast temp to an int with .toInt()
         feelsLike.text = getString(R.string.feels_like, currentConditions.main.feelsLike.toInt())
         highTemp.text = getString(R.string.high, currentConditions.main.tempMax.toInt())
         lowTemp.text = getString(R.string.low, currentConditions.main.tempMin.toInt())
