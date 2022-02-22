@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         /**
          *  val call: Call<CurrentConditions> = api.getCurrentConditions("55124")
-         *      Creates a call object for us through out API.
+         *      Creates a call object for us through our API.
          *  "call.enqueue"
          *      puts the call on the call queue, which is internally managed by retrofit. We don't have to worry about it.
          *   Then we pass the Callback object to it. Finally, we have to implement two functions: onResponse and onFailure.
