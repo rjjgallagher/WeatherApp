@@ -33,7 +33,7 @@ class ForecastActivity : AppCompatActivity() {
             .add(KotlinJsonAdapterFactory())
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pro.openweathermap.org/data/2.5/forecast/")
+            .baseUrl("https://pro.openweathermap.org/data/2.5/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
