@@ -24,8 +24,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private val apiKey = "e23be7dabdbe9983722033759ffb9fc3"
-
     private lateinit var api: Api
     private lateinit var cityName: TextView
     private lateinit var currentTemp: TextView
