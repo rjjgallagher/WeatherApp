@@ -29,8 +29,10 @@ interface Api {
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
     ): Call<CurrentConditions>
 
-    //api.openweathermap.org/data/2.5/forecast/daily?zip={zip code},{country code}&appid={API key}
-    @GET("daily")
+    /** The arguments provided to this function will be appended to the URL at runtime as Query parameters.
+     *  The end point, or the path location, is "daily/forecast".
+     */
+    @GET("forecast/daily")
     fun getForecast(
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,

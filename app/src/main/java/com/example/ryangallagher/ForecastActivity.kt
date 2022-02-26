@@ -38,7 +38,7 @@ class ForecastActivity : AppCompatActivity() {
             .add(KotlinJsonAdapterFactory())
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pro.openweathermap.org/data/2.5/forecast/")
+            .baseUrl("https://pro.openweathermap.org/data/2.5/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
@@ -61,12 +61,11 @@ class ForecastActivity : AppCompatActivity() {
                 call: Call<Forecast>,
                 response: Response<Forecast>
             ) {
-                val forecast = response.body()         // with our Response object, we can get access to the body() function which will do the deserialization for us.
+                val forecast = response.body() // with our Response object, we can get access to the body() function which will do the deserialization for us.
                 forecast?.let {  //let function, built-in function in Kotlin.
                     bindData(it.list)
                 }
             }
-
             override fun onFailure(call: Call<Forecast>, t: Throwable) {
                 t.printStackTrace()
             }
