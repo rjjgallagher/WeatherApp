@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadData()
     }
 
+    // in place of the binding declaration above, video has a binding declaration like:
+    // var binding: ActivityMainBinding? = null
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        binding = null
+//    }
+
     private fun bindData(currentConditions: CurrentConditions) {
         binding.cityName.text = currentConditions.name
         binding.temperature.text = getString(

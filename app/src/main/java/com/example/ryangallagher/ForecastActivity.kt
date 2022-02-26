@@ -25,14 +25,12 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class ForecastActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: Api
-    private lateinit var binding: ActivityForecastBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityForecastBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        //binding = ActivityForecastBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+        //recyclerView.layoutManager = LinearLayoutManager(this)
 
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
