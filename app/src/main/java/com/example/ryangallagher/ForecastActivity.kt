@@ -25,7 +25,6 @@ class ForecastActivity : AppCompatActivity() {
     private lateinit var api: Api
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("FA_onCreate", "Beginning of Forecast Activity onCreate method")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
 
@@ -37,7 +36,6 @@ class ForecastActivity : AppCompatActivity() {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-        Log.d("Post-Moshi/Retrofit", "Line prior to api creation")
         api = retrofit.create(Api::class.java)
 
         recyclerView = findViewById(R.id.recyclerView)

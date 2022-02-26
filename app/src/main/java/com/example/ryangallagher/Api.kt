@@ -26,7 +26,7 @@ interface Api {
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
-        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
+        @Query("appid") appId: String = BuildConfig.OWM_KEY,
     ): Call<CurrentConditions>
 
     //api.openweathermap.org/data/2.5/forecast/daily?zip={zip code},{country code}&appid={API key}
@@ -35,7 +35,7 @@ interface Api {
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
-        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
+        @Query("appid") appId: String = BuildConfig.OWM_KEY,
         @Query("cnt") count: String = "16",
     ): Call<Forecast>
 }
