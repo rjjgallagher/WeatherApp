@@ -7,6 +7,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ryangallagher.databinding.ActivityForecastBinding
+import com.example.ryangallagher.databinding.ActivityMainBinding
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Call
@@ -23,10 +25,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class ForecastActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var api: Api
+    private lateinit var binding: ActivityForecastBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forecast)
+        binding = ActivityForecastBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
@@ -37,9 +43,6 @@ class ForecastActivity : AppCompatActivity() {
             .build()
 
         api = retrofit.create(Api::class.java)
-
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
         val actionBar = supportActionBar
 
