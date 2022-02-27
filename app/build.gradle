@@ -48,6 +48,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'

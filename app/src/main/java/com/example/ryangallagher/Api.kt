@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface Api {
 
-    /** When we construct out URL, it is expecting Query parameters. Query parameters are key-value pairs that you can send
+    /* When we construct out URL, it is expecting Query parameters. Query parameters are key-value pairs that you can send
      *  to a http server. And it's everything after the question mark in the API call. The question mark is a special character that says
      *  "api.openweathermap.org/data/2.5/weather" is the resource location and "zip={zip code},{country code}&appid={API key}" are parameters.
      *  The parameters are delimited by the "&", pronounced "ampersand."
@@ -18,7 +18,7 @@ interface Api {
      */
 
 
-    /** The arguments provided to this function will be appended to the URL at runtime as Query parameters.
+    /* The arguments provided to this function will be appended to the URL at runtime as Query parameters.
      *  The end point, or the path location, is "weather".
      */
     @GET("weather")
@@ -29,7 +29,7 @@ interface Api {
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
     ): Call<CurrentConditions>
 
-    /** The arguments provided to this function will be appended to the URL at runtime as Query parameters.
+    /* The arguments provided to this function will be appended to the URL at runtime as Query parameters.
      *  The end point, or the path location, is "daily/forecast".
      */
     @GET("forecast/daily")

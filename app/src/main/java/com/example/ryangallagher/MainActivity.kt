@@ -8,18 +8,12 @@ import com.example.ryangallagher.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-/**                CHECKLIST
- * []go through and delete garbage comments
- * []thoroughly document everything.
- */
-
-/**
+/*
  * Now we have our MainActivity operating as a view and just a view. Only has view logic in it.
  */
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     @Inject lateinit var viewModel: MainViewModel // you cannot inject private fields. viewModel must be public.
 
@@ -35,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.currentConditions.observe(this) {currentConditions ->
+        viewModel.currentConditions.observe(this) { currentConditions ->
             bindData(currentConditions)
         }
         viewModel.loadData()

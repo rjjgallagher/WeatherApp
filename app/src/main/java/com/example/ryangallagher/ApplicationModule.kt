@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 
-/**
+/*
  * The annotations tell the compiler to create classes for you and do these bindings for you.
  * What we've got is this object that Hilt knows about and there is a function that provides our API
  * service for us (provideApiService()). We've denoted that it provides the Api service by the pair being
@@ -19,6 +19,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * because it has the same type. Anytime there is an Inject annotation, it will look for either a class
  * with an inject constructor if its the same type, or a provides function.
  */
+
 @Module
 @InstallIn(ActivityComponent::class)
 class ApplicationModule {
