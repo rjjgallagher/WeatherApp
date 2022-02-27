@@ -22,22 +22,22 @@ interface Api {
      *  The end point, or the path location, is "weather".
      */
     @GET("weather")
-    fun getCurrentConditions(
+    suspend fun getCurrentConditions(
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
-    ): Call<CurrentConditions>
+    ): CurrentConditions
 
     /* The arguments provided to this function will be appended to the URL at runtime as Query parameters.
      *  The end point, or the path location, is "daily/forecast".
      */
     @GET("forecast/daily")
-    fun getForecast(
+    suspend fun getForecast(
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
         @Query("cnt") count: String = "16",
-    ): Call<Forecast>
+    ): Forecast
 }
