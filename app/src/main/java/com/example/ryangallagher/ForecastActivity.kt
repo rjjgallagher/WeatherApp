@@ -15,7 +15,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ForecastActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
-    @Inject lateinit var viewModel: ForecastViewModel
+    @Inject
+    lateinit var viewModel: ForecastViewModel
     private lateinit var binding: ActivityForecastBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class ForecastActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.forecast.observe(this) {forecast ->
+        viewModel.forecast.observe(this) { forecast ->
             binding.recyclerView.adapter = MyAdapter(forecast.list)
         }
         viewModel.loadData()

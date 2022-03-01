@@ -15,7 +15,8 @@ class MyAdapter(private val dayForecastData: List<DayForecast>) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     @SuppressLint("NewApi")
-    class ViewHolder(private val itemBinding: RowDateBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    class ViewHolder(private val itemBinding: RowDateBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
         private val timeFormatter = DateTimeFormatter.ofPattern("h:mma")
         private val dateFormatter = DateTimeFormatter.ofPattern("MMM d")
 
@@ -47,7 +48,13 @@ class MyAdapter(private val dayForecastData: List<DayForecast>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(RowDateBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            RowDateBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

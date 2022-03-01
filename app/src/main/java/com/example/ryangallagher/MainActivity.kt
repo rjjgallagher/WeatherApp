@@ -15,7 +15,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    @Inject lateinit var viewModel: MainViewModel // you cannot inject private fields. viewModel must be public.
+    @Inject
+    lateinit var viewModel: MainViewModel // you cannot inject private fields. viewModel must be public.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +42,14 @@ class MainActivity : AppCompatActivity() {
             R.string.temperature,
             currentConditions.main.temp.toInt()
         ) //the "d" in %1$d wants an integer, so we cast temp to an int with .toInt()
-        binding.feelsLike.text = getString(R.string.feels_like, currentConditions.main.feelsLike.toInt())
+        binding.feelsLike.text =
+            getString(R.string.feels_like, currentConditions.main.feelsLike.toInt())
         binding.high.text = getString(R.string.high, currentConditions.main.tempMax.toInt())
         binding.low.text = getString(R.string.low, currentConditions.main.tempMin.toInt())
-        binding.humidity.text = getString(R.string.humidity, currentConditions.main.humidity.toInt())
-        binding.pressure.text = getString(R.string.pressure, currentConditions.main.pressure.toInt())
+        binding.humidity.text =
+            getString(R.string.humidity, currentConditions.main.humidity.toInt())
+        binding.pressure.text =
+            getString(R.string.pressure, currentConditions.main.pressure.toInt())
 
         val iconName = currentConditions.weather.firstOrNull()?.icon
         val iconUrl = "https://openweathermap.org/img/wn/${iconName}@2x.png"
