@@ -25,6 +25,7 @@ interface Api {
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
+
     ): CurrentConditions
 
     /* The arguments provided to this function will be appended to the URL at runtime as Query parameters.

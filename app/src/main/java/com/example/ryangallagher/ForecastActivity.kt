@@ -21,8 +21,10 @@ class ForecastActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityForecastBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val actionBar = supportActionBar
