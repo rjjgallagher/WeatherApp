@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.ryangallagher.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/searchToCurrentConditions"
+            app:destination="@id/currentConditionsFragment" />
+        <argument
+            android:name="zipCodeArg"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/currentConditionsFragment"
+        android:name="com.example.ryangallagher.CurrentConditionsFragment"
+        android:label="current_conditions_fragment"
+        tools:layout="@layout/current_conditions_fragment" >
+        <action
+            android:id="@+id/currentToForecast"
+            app:destination="@id/forecastFragment" />
+        <argument
+            android:name="zipCodeArg"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="currentConditionsArg"
+            app:argType="com.example.ryangallagher.CurrentConditions"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/forecastFragment"
+        android:name="com.example.ryangallagher.ForecastFragment"
+        android:label="fragment_forecast"
+        tools:layout="@layout/fragment_forecast" >
+        <action
+            android:id="@+id/forecastToCurrentConditions"
+            app:destination="@id/currentConditionsFragment" />
+        <argument
+            android:name="zipCodeArg"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>
