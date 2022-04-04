@@ -1,5 +1,6 @@
 package com.example.ryangallagher
 
+import android.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,7 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
         }
     }
     //1:24 week 7 lecture
+
 
     private fun isValidZipCode(zipCode: String): Boolean {
         return zipCode.length == 5 && zipCode.all {it.isDigit()}
