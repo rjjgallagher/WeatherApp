@@ -14,7 +14,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
 
-    private val args: ForecastFragmentArgs by navArgs()
+    private val args: ForecastFragmentArgs by this.navArgs()
     private lateinit var binding: FragmentForecastBinding
     @Inject
     lateinit var viewModel: ForecastViewModel

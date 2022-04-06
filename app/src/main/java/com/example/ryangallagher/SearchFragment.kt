@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import com.example.ryangallagher.databinding.SearchFragmentBinding
@@ -47,7 +50,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
         //possibly replace requireContext() with requireActivity()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
+        locationRequest = LocationRequest.create()
 
         binding.locationButton.setOnClickListener {
             showLocationPreview()
@@ -68,7 +71,6 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //initialize this fragments activity bars title.
         requireActivity().title = "Search"
 
         viewModel.enableButton.observe(viewLifecycleOwner) { enable ->
