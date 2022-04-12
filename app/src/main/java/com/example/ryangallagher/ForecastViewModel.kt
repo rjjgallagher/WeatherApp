@@ -16,5 +16,11 @@ class ForecastViewModel @Inject constructor(private val service: Api) : ViewMode
     fun loadData(zipCodeArg: String?) = runBlocking {
         launch { _forecast.value = service.getForecast(zipCodeArg!!) }
     }
+
+    fun loadLLData(latArg: Double?, lonArg: Double?) = runBlocking {
+        launch {
+            _forecast.value = service.getForecastLL(latArg!!, lonArg!!)
+        }
+    }
 }
 

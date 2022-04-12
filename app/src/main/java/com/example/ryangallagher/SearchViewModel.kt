@@ -14,6 +14,8 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
     private val _showErrorDialog = MutableLiveData(false)
     private var zipCode: String? = null
     private val _currentConditions = MutableLiveData<CurrentConditions>()
+    private var lat: Double? = null
+    private var lon: Double? = null
 
     val enableButton: LiveData<Boolean>
         get() = _enableButton
@@ -30,8 +32,13 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
             _enableButton.value = isValidZipCode(zipCode)
         }
     }
-    //1:24 week 7 lecture
 
+    fun updateLatLon(lat: Double?, lon: Double?) {
+        if (lat != this.lat && lon != this.lon) {
+            this.lat = lat
+            this.lon = lat
+        }
+    }
 
     private fun isValidZipCode(zipCode: String): Boolean {
         return zipCode.length == 5 && zipCode.all {it.isDigit()}
@@ -54,7 +61,7 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
 //    fun submitLocationBtnClicked() = runBlocking {
 //        launch {
 //            try {
-//                _currentCOnditions.value =
+//                _currentConditions.value = api.getForecastLL()
 //            } catch (e: HttpException) {
 //                _showErrorDialog.value = true
 //            }

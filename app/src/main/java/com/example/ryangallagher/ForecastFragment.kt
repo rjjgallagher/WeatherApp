@@ -11,6 +11,8 @@ import com.example.ryangallagher.databinding.FragmentForecastBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
+
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
 
@@ -40,5 +42,6 @@ class ForecastFragment : Fragment() {
             binding.recyclerView.adapter = MyAdapter(forecast.list)
         }
         viewModel.loadData(args.zipCodeArg)
+
     }
 }

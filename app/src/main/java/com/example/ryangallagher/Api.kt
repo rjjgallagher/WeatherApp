@@ -39,4 +39,13 @@ interface Api {
         @Query("appid") appId: String = BuildConfig.OWM_KEY,
         @Query("cnt") count: String = "16",
     ): Forecast
+
+    @GET ("forecast/daily")
+    suspend fun getForecastLL(
+        @Query("lat") lat: Double?,
+        @Query("lon") lon: Double?,
+        @Query("units") units: String = "imperial",
+        @Query("appid") appId: String = BuildConfig.OWM_KEY,
+        @Query("cnt") count: String = "16",
+    ): Forecast
 }
