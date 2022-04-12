@@ -51,6 +51,16 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
         }
     }
 
+//    fun submitLocationBtnClicked() = runBlocking {
+//        launch {
+//            try {
+//                _currentCOnditions.value =
+//            } catch (e: HttpException) {
+//                _showErrorDialog.value = true
+//            }
+//        }
+//    }
+
     fun setErrorDialogToFalse() {
         _showErrorDialog.value = false
     }

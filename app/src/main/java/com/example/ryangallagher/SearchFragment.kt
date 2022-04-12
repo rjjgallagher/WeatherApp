@@ -3,6 +3,7 @@ package com.example.ryangallagher
 import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
@@ -12,9 +13,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.constraintlayout.motion.widget.Debug.getLocation
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import com.example.ryangallagher.databinding.SearchFragmentBinding
@@ -38,8 +36,8 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     @Suppress("PrivatePropertyName")
     private val REQUEST_LOCATION_PERMISSION = 100
     private lateinit var locationRequest: LocationRequest
-    var locationLon: Double = 0.0
-    var locationLat: Double = 0.0
+    var locationLon: Double? = null
+    var locationLat: Double? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +63,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                 }
             }
         }
+        getLastLocation()
         return binding.root
     }
 
@@ -165,9 +164,40 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     ) {
         if(requestCode == REQUEST_LOCATION_PERMISSION) {
             if(grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation()
                 Log.d("Debug", "Permission has been granted")
+            }
+            else {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             }
         }
     }
 
+    private fun getLastLocation() {
+        locationRequest.interval = 0L
+        locationRequest.fastestInterval = 0L
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        if(ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+
+            fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { task ->
+                val location: Location? = task
+
+                if (location != null) {
+                    locationLat = location.latitude
+                    locationLon = location.longitude
+                }
+            }
+        }
+    }
+
+//    fun getLat() : Double? {
+//        return locationLat
+//    }
+//
+//    fun getLon() : Double? {
+//        return locationLon
+//    }
 }
