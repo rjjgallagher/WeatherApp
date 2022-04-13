@@ -24,7 +24,7 @@ interface Api {
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
-        @Query("appid") appId: String = BuildConfig.OWM_KEY,
+        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
 
     ): CurrentConditions
 
@@ -36,16 +36,24 @@ interface Api {
         //with Kotlin, you can have default parameters, which we're utilizing here in this function.
         @Query("zip") zip: String,
         @Query("units") units: String = "imperial",
-        @Query("appid") appId: String = BuildConfig.OWM_KEY,
+        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
         @Query("cnt") count: String = "16",
     ): Forecast
 
-    @GET ("forecast/daily")
-    suspend fun getForecastLL(
-        @Query("lat") lat: Double?,
-        @Query("lon") lon: Double?,
+    @GET("weather")
+    suspend fun getCurrentConditionsLL(
+        @Query("lat") lat: String?,
+        @Query("lon") lon: String?,
         @Query("units") units: String = "imperial",
-        @Query("appid") appId: String = BuildConfig.OWM_KEY,
+        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
+    ): CurrentConditions
+
+    @GET ("forecast/daily")
+    suspend fun getForecastLatLon(
+        @Query("lat") lat: String?,
+        @Query("lon") lon: String?,
+        @Query("units") units: String = "imperial",
+        @Query("appid") appId: String = "e23be7dabdbe9983722033759ffb9fc3",
         @Query("cnt") count: String = "16",
     ): Forecast
 }

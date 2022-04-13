@@ -12,4 +12,8 @@ class CurrentConditionsViewModel  : ViewModel() {
     fun loadData(currentConditionsArg: CurrentConditions) {
         _currentConditions.value = currentConditionsArg
     }
+
+//    fun loadLLData(currentConditionsArg: CurrentConditions) {
+//        _currentConditions.value =
+//    }
 }

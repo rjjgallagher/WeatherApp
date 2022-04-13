@@ -36,8 +36,8 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     @Suppress("PrivatePropertyName")
     private val REQUEST_LOCATION_PERMISSION = 100
     private lateinit var locationRequest: LocationRequest
-    var locationLon: Double? = null
-    var locationLat: Double? = null
+    var locationLon: String? = null
+    var locationLat: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,20 +46,23 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     ): View? {
         binding = SearchFragmentBinding.inflate(layoutInflater)
 
-        //possibly replace requireContext() with requireActivity()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create()
 
         binding.locationButton.setOnClickListener {
             showLocationPreview()
+            viewModel.locationBtnClicked()
         }
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult ?: return
                 for (location in locationResult.locations) {
-                    locationLon = location.longitude
-                    locationLat = location.latitude
+                    locationLon = location.longitude.toString()
+                    locationLat = location.latitude.toString()
+                    viewModel.updateLatLon(locationLat, locationLon)
+                    navigateToCurrentConditions()
+                    return
                 }
             }
         }
@@ -96,16 +99,22 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
             }
         })
 
+
         binding.button.setOnClickListener {
             viewModel.submitButtonClicked()
             if(!(viewModel.showErrorDialog.value!!)) {
-                val currentConditionsArg = SearchFragmentDirections.searchToCurrentConditions(viewModel.getZipCode(), viewModel.currentConditions.value)
-                Navigation.findNavController(it).navigate(currentConditionsArg)
+                navigateToCurrentConditions()
             }
             else {
                 viewModel.setErrorDialogToFalse()
             }
         }
+    }
+
+    private fun navigateToCurrentConditions() {
+        val currentConditionsArg = SearchFragmentDirections.searchToCurrentConditions(viewModel.getZipCode(), viewModel.currentConditions.value,
+            viewModel.getLon().toString(), viewModel.getLat().toString())
+        Navigation.findNavController(binding.root).navigate(currentConditionsArg)
     }
 
     override fun onResume() {
@@ -186,18 +195,10 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                 val location: Location? = task
 
                 if (location != null) {
-                    locationLat = location.latitude
-                    locationLon = location.longitude
+                    locationLat = location.latitude.toString()
+                    locationLon = location.longitude.toString()
                 }
             }
         }
     }
-
-//    fun getLat() : Double? {
-//        return locationLat
-//    }
-//
-//    fun getLon() : Double? {
-//        return locationLon
-//    }
 }

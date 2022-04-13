@@ -19,10 +19,12 @@
             app:nullable="true" />
         <argument
             android:name="latArg"
-            app:argType="float" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="lonArg"
-            app:argType="float" />
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/currentConditionsFragment"

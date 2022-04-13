@@ -41,7 +41,11 @@ class ForecastFragment : Fragment() {
         viewModel.forecast.observe(this) { forecast ->
             binding.recyclerView.adapter = MyAdapter(forecast.list)
         }
-        viewModel.loadData(args.zipCodeArg)
-
+        //if zip is null -> do lat lon api call. else do line 45 call
+        if(args.zipCodeArg == null) {
+            viewModel.loadData(args.latArg, args.lonArg)
+        } else {
+            viewModel.loadData(args.zipCodeArg)
+        }
     }
 }
