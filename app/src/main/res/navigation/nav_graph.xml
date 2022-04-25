@@ -17,6 +17,14 @@
             android:name="zipCodeArg"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="latArg"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="lonArg"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/currentConditionsFragment"
@@ -34,6 +42,8 @@
             android:name="currentConditionsArg"
             app:argType="com.example.ryangallagher.CurrentConditions"
             app:nullable="true" />
+        <argument android:name="lonArg" />
+        <argument android:name="latArg" />
     </fragment>
     <fragment
         android:id="@+id/forecastFragment"
@@ -47,5 +57,7 @@
             android:name="zipCodeArg"
             app:argType="string"
             app:nullable="true" />
+        <argument android:name="latArg" />
+        <argument android:name="lonArg" />
     </fragment>
 </navigation>

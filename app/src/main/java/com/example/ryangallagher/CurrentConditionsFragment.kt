@@ -32,8 +32,8 @@ class CurrentConditionsFragment : Fragment() {
         requireActivity().title = "Current Conditions"
         viewModel = CurrentConditionsViewModel()
         binding.forecastButton.setOnClickListener {
-            val zipCodeArg = CurrentConditionsFragmentDirections.currentToForecast(args.zipCodeArg)
-            Navigation.findNavController(it).navigate(zipCodeArg)
+            val arguments = CurrentConditionsFragmentDirections.currentToForecast(args.zipCodeArg, args.latArg, args.lonArg) //not sure if this is what I want.
+            Navigation.findNavController(it).navigate(arguments)
         }
     }
 

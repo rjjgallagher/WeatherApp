@@ -1,5 +1,7 @@
 package com.example.ryangallagher
 
+import android.app.AlertDialog
+import android.media.metrics.Event
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,9 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
     private val _showErrorDialog = MutableLiveData(false)
     private var zipCode: String? = null
     private val _currentConditions = MutableLiveData<CurrentConditions>()
+    private var lat: String? = null
+    private var lon: String? = null
+
 
     val enableButton: LiveData<Boolean>
         get() = _enableButton
@@ -29,7 +34,12 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
             _enableButton.value = isValidZipCode(zipCode)
         }
     }
-    //1:24 week 7 lecture
+
+    fun updateLatLon(lat: String?, lon: String?) {
+        if (!this.lat.equals(lat) && !this.lon.equals(lon))
+        this.lat = lat
+        this.lon = lon
+    }
 
     private fun isValidZipCode(zipCode: String): Boolean {
         return zipCode.length == 5 && zipCode.all {it.isDigit()}
@@ -49,8 +59,25 @@ class SearchViewModel @Inject constructor(private val api: Api) : ViewModel() {
         }
     }
 
+    fun locationBtnClicked() = runBlocking {
+        launch {
+            try {
+                _currentConditions.value = api.getCurrentConditionsLL(lat.toString(), lon.toString())
+            } catch (e: HttpException) {
+                _showErrorDialog.value = true
+            }
+        }
+    }
+
     fun setErrorDialogToFalse() {
         _showErrorDialog.value = false
     }
 
+    fun getLat(): String? {
+        return lat
+    }
+
+    fun getLon(): String? {
+        return lon
+    }
 }
