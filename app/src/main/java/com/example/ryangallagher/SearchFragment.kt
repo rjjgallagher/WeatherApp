@@ -8,7 +8,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -20,12 +19,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.get
 import androidx.navigation.Navigation
 import com.example.ryangallagher.databinding.SearchFragmentBinding
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -41,6 +37,9 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
     private lateinit var binding: SearchFragmentBinding
     @Inject lateinit var viewModel: SearchViewModel
+
+    //testing
+    private lateinit var notificationManager: NotificationManager
 
     private val CHANNEL_ID = "channel_id_example"
     private val notificationId = 1111
@@ -62,18 +61,19 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         binding = SearchFragmentBinding.inflate(layoutInflater)
 
         createNotificationChannel()
+
         var status = 0
         binding.notificationButton.text = "Turn On Notifications"
         binding.notificationButton.setOnClickListener {                            //Notification Button OnClickListener
             if(status == 0) {
                 binding.notificationButton.text = "Turn Off Notifications"
                 status = 1
+                sendNotification()
             } else {
                 binding.notificationButton.text = "Turn On Notifications"
                 status = 0
-                //notificationManager.cancel(1111)
+                turnOffNotifications()
             }
-            sendNotification()
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -153,7 +153,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     }
 
     private fun startLocationUpdates() {
-        if (checkPermission()) {
+        if (checkLocationPermission()) {
             fusedLocationClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
@@ -162,8 +162,12 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         }
     }
 
-    private fun checkPermission(): Boolean {
+    private fun checkLocationPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkNotificationServicePermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun showLocationPreview() {
@@ -241,17 +245,23 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                 description = descriptionText
             }
 
-            val notificationManager: NotificationManager =
+            notificationManager =
                 requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+
+
         }
     }
 
-    private fun sendNotification() {
-        createNotification()
+    private fun turnOffNotifications() {
+        notificationManager.cancel(notificationId)
     }
 
-    private fun createNotification() {
+    private fun sendNotification() {
+        createWeatherNotification()
+    }
+
+    private fun createWeatherNotification() {
         val intent = Intent(requireActivity(), MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -262,12 +272,10 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
             PendingIntent.FLAG_IMMUTABLE
         )
 
-        val bitmap = BitmapFactory.decodeResource(requireActivity().applicationContext.resources, R.drawable.sun)
-
         val builder = NotificationCompat.Builder(requireActivity(), CHANNEL_ID)
             .setSmallIcon(R.drawable.sun)
-            .setContentTitle("Example title")
-            .setContentText("Example description")
+            .setContentTitle("content title")
+            .setContentText("ContextText description")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
