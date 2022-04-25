@@ -2,8 +2,15 @@ package com.example.ryangallagher
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
@@ -13,7 +20,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.get
 import androidx.navigation.Navigation
 import com.example.ryangallagher.databinding.SearchFragmentBinding
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -29,6 +41,9 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
     private lateinit var binding: SearchFragmentBinding
     @Inject lateinit var viewModel: SearchViewModel
+
+    private val CHANNEL_ID = "channel_id_example"
+    private val notificationId = 1111
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -46,6 +61,21 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     ): View? {
         binding = SearchFragmentBinding.inflate(layoutInflater)
 
+        createNotificationChannel()
+        var status = 0
+        binding.notificationButton.text = "Turn On Notifications"
+        binding.notificationButton.setOnClickListener {                            //Notification Button OnClickListener
+            if(status == 0) {
+                binding.notificationButton.text = "Turn Off Notifications"
+                status = 1
+            } else {
+                binding.notificationButton.text = "Turn On Notifications"
+                status = 0
+                //notificationManager.cancel(1111)
+            }
+            sendNotification()
+        }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create()
 
@@ -56,7 +86,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult ?: return
+                locationResult
                 for (location in locationResult.locations) {
                     locationLon = location.longitude.toString()
                     locationLat = location.latitude.toString()
@@ -199,6 +229,51 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                     locationLon = location.longitude.toString()
                 }
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Example name"
+            val descriptionText = "Notification description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager =
+                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun sendNotification() {
+        createNotification()
+    }
+
+    private fun createNotification() {
+        val intent = Intent(requireActivity(), MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            requireActivity(),
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val bitmap = BitmapFactory.decodeResource(requireActivity().applicationContext.resources, R.drawable.sun)
+
+        val builder = NotificationCompat.Builder(requireActivity(), CHANNEL_ID)
+            .setSmallIcon(R.drawable.sun)
+            .setContentTitle("Example title")
+            .setContentText("Example description")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(requireActivity())) {
+            notify(notificationId, builder.build())
         }
     }
 }

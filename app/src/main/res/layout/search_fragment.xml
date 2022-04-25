@@ -44,5 +44,11 @@
         android:layout_height="wrap_content"
         android:text="@string/RequestMyLocation" />
 
+    <Button
+        android:id="@+id/notificationButton"
+        android:text="@string/NotificationButton"
+        android:layout_width="209dp"
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>
