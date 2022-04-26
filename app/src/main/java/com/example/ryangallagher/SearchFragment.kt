@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -30,6 +31,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationRequest
 import dagger.hilt.android.AndroidEntryPoint
+import hilt_aggregated_deps._dagger_hilt_android_internal_modules_ApplicationContextModule
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,6 +45,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
     private val CHANNEL_ID = "channel_id_example"
     private val notificationId = 1111
+    private var notificationFlag: Boolean = false
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -60,19 +63,24 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     ): View? {
         binding = SearchFragmentBinding.inflate(layoutInflater)
 
-        createNotificationChannel()
+
+//        createNotificationChannel()
+//        serviceIntent = Intent(requireActivity().applicationContext, NotificationService::class.java)
+//        requireActivity().registerReciever(updateNotification, IntentFilter(NotificationService.TIMER_UPDATED))
 
         var status = 0
         binding.notificationButton.text = "Turn On Notifications"
-        binding.notificationButton.setOnClickListener {                            //Notification Button OnClickListener
-            if(status == 0) {
-                binding.notificationButton.text = "Turn Off Notifications"
-                status = 1
-                sendNotification()
-            } else {
-                binding.notificationButton.text = "Turn On Notifications"
-                status = 0
-                turnOffNotifications()
+        binding.notificationButton.setOnClickListener {                                      //Notification Button OnClickListener
+            if (checkNotificationServicePermission()) {
+                if (status == 0) {
+                    binding.notificationButton.text = "Turn Off Notifications"
+                    status = 1
+                    sendNotification()
+                } else {
+                    binding.notificationButton.text = "Turn On Notifications"
+                    status = 0
+                    turnOffNotifications()
+                }
             }
         }
 
