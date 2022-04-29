@@ -1,10 +1,12 @@
 package com.example.ryangallagher
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -31,7 +33,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationRequest
 import dagger.hilt.android.AndroidEntryPoint
-import hilt_aggregated_deps._dagger_hilt_android_internal_modules_ApplicationContextModule
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,12 +41,9 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     private lateinit var binding: SearchFragmentBinding
     @Inject lateinit var viewModel: SearchViewModel
 
-    //testing
-    private lateinit var notificationManager: NotificationManager
-
     private val CHANNEL_ID = "channel_id_example"
     private val notificationId = 1111
-    private var notificationFlag: Boolean = false
+    private lateinit var serviceIntent: Intent
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -55,6 +53,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
     private lateinit var locationRequest: LocationRequest
     var locationLon: String? = null
     var locationLat: String? = null
+    private var notificationFlag: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,23 +63,32 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         binding = SearchFragmentBinding.inflate(layoutInflater)
 
 
-//        createNotificationChannel()
-//        serviceIntent = Intent(requireActivity().applicationContext, NotificationService::class.java)
-//        requireActivity().registerReciever(updateNotification, IntentFilter(NotificationService.TIMER_UPDATED))
+        createNotificationChannel()
+        serviceIntent = Intent(requireActivity().applicationContext, NotificationService::class.java)
+        requireActivity().registerReceiver(updateNotification, IntentFilter(NotificationService.TIMER_UPDATED))
 
-        var status = 0
-        binding.notificationButton.text = "Turn On Notifications"
-        binding.notificationButton.setOnClickListener {                                      //Notification Button OnClickListener
-            if (checkNotificationServicePermission()) {
-                if (status == 0) {
-                    binding.notificationButton.text = "Turn Off Notifications"
-                    status = 1
+        binding.notificationButton.text = getString(R.string.turn_on_notifications)
+        binding.notificationButton.setOnClickListener {                                                      //Notification Button OnClickListener
+            if(checkNotificationServicePermission() && checkLocationPermission()) {
+                getLocation()
+                if(!notificationFlag) {
+                    notificationFlag = true
+                    serviceIntent.putExtra(NotificationService.ELAPSED_TIME, 0)
+                    requireActivity().startService(serviceIntent)
                     sendNotification()
-                } else {
-                    binding.notificationButton.text = "Turn On Notifications"
-                    status = 0
-                    turnOffNotifications()
+                    binding.notificationButton.text = getString(R.string.turn_off_notifications)
                 }
+                else {
+                    notificationFlag = false
+                    requireActivity().stopService(serviceIntent)
+                    with(NotificationManagerCompat.from(requireContext())) {
+                        cancel(notificationId)
+                    }
+                    binding.notificationButton.text = getString(R.string.turn_on_notifications)
+                }
+            }
+            else {
+                requestLocationPermission()
             }
         }
 
@@ -89,7 +97,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
         binding.locationButton.setOnClickListener {
             showLocationPreview()
-            viewModel.locationBtnClicked()
+            getLastLocation()
         }
 
         locationCallback = object : LocationCallback() {
@@ -99,14 +107,20 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                     locationLon = location.longitude.toString()
                     locationLat = location.latitude.toString()
                     viewModel.updateLatLon(locationLat, locationLon)
-                    navigateToCurrentConditions()
+                    viewModel.locationBtnClicked().invokeOnCompletion {
+                        if(it == null) {
+                            navigateToCurrentConditions()
+                            //createnotification() instead of navigate^ pass it location
+                        }
+                    }
                     return
                 }
             }
         }
-        getLastLocation()
+        //getLastLocation()
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -114,7 +128,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         requireActivity().title = "Search"
 
         viewModel.enableButton.observe(viewLifecycleOwner) { enable ->
-            binding.button.isEnabled = enable
+            binding.searchBtn.isEnabled = enable
         }
 
         viewModel.showErrorDialog.observe(viewLifecycleOwner) { showError ->
@@ -138,7 +152,7 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         })
 
 
-        binding.button.setOnClickListener {
+        binding.searchBtn.setOnClickListener {
             viewModel.submitButtonClicked()
             if(!(viewModel.showErrorDialog.value!!)) {
                 navigateToCurrentConditions()
@@ -224,6 +238,16 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         }
     }
 
+    private fun getLocation() {
+        try {
+            viewModel.notificationBtnClicked(locationLat!!, locationLon!!)
+        } catch (e : NullPointerException) {
+            locationLat = "44.7319"
+            locationLon = "93.2177"
+            viewModel.notificationBtnClicked(locationLat!!, locationLon!!)
+        }
+    }
+
     private fun getLastLocation() {
         locationRequest.interval = 0L
         locationRequest.fastestInterval = 0L
@@ -231,14 +255,15 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
         if(ActivityCompat.checkSelfPermission(
                 requireActivity(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        //  fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
 
-            fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { task ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { task ->
                 val location: Location? = task
 
                 if (location != null) {
                     locationLat = location.latitude.toString()
                     locationLon = location.longitude.toString()
+                    viewModel.locationBtnClicked()
                 }
             }
         }
@@ -253,23 +278,13 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
                 description = descriptionText
             }
 
-            notificationManager =
+            val notificationManager: NotificationManager =
                 requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-
-
         }
     }
 
-    private fun turnOffNotifications() {
-        notificationManager.cancel(notificationId)
-    }
-
     private fun sendNotification() {
-        createWeatherNotification()
-    }
-
-    private fun createWeatherNotification() {
         val intent = Intent(requireActivity(), MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -290,6 +305,21 @@ class SearchFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCall
 
         with(NotificationManagerCompat.from(requireActivity())) {
             notify(notificationId, builder.build())
+        }
+    }
+
+    private val updateNotification: BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("StringFormatInvalid")
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            getLocation()
+            var builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.notificationTitle, viewModel.currentConditions.value?.name))
+                .setContentText(getString(R.string.notificationText, viewModel.currentConditions.value?.main?.temp?.toInt()))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            with(NotificationManagerCompat.from(requireContext())) {
+                notify(notificationId, builder.build())
+            }
         }
     }
 }
